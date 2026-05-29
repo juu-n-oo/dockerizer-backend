@@ -6,7 +6,7 @@ metadata:
     {{- include "backend-server.labels" . | nindent 4 }}
 rules:
   # ImageBuild CR operations
-  - apiGroups: ["brewery.aipub.ten1010.io"]
+  - apiGroups: ["dockerizer.aipub.ten1010.io"]
     resources: ["imagebuilds"]
     verbs: ["get", "list", "create"]
   # Pod access (get for exec prerequisite, log for Kaniko build logs)

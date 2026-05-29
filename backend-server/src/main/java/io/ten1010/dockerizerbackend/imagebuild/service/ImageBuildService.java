@@ -37,8 +37,8 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class ImageBuildService {
 
-    private static final String LABEL_DOCKERFILE_ID = "brewery.aipub.ten1010.io/dockerfile-id";
-    private static final String LABEL_USERNAME = "brewery.aipub.ten1010.io/username";
+    private static final String LABEL_DOCKERFILE_ID = "dockerizer.aipub.ten1010.io/dockerfile-id";
+    private static final String LABEL_USERNAME = "dockerizer.aipub.ten1010.io/username";
 
     private final DockerfileRepository dockerfileRepository;
     private final DockerfileValidator dockerfileValidator;

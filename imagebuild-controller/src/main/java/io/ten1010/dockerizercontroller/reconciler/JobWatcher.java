@@ -23,7 +23,7 @@ public class JobWatcher {
 
     private static final String LABEL_MANAGED_BY = "app.kubernetes.io/managed-by";
     private static final String MANAGER_NAME = "dockerizer-controller";
-    private static final String LABEL_IMAGEBUILD_NAME = "brewery.aipub.ten1010.io/imagebuild-name";
+    private static final String LABEL_IMAGEBUILD_NAME = "dockerizer.aipub.ten1010.io/imagebuild-name";
 
     private final ApiClient apiClient;
     private final BatchV1Api batchV1Api;
