@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: aipub-brewery-backend  # Required: e.g. harbor.example.com/brewery/backend-server
+  repository: dockerizer-backend  # Required: e.g. harbor.example.com/brewery/backend-server
   tag: 0.0.1         # Defaults to Chart.appVersion
   pullPolicy: IfNotPresent
 
@@ -25,7 +25,7 @@ ingress:
   hosts:
     - host: aipub-brewery.cluster7.idc1.ten1010.io
   frontend:
-    serviceName: aipub-brewery-web
+    serviceName: dockerizer-web
     servicePort: 80
   tls: []
 
@@ -49,7 +49,7 @@ postgresql:
     tag: "16"
     pullPolicy: IfNotPresent
   auth:
-    database: brewery
+    database: dockerizer
     username: aipub
     password: ""  # Required: set via --set or values override
   persistence:
@@ -76,8 +76,8 @@ config:
   jpa:
     ddlAuto: validate
     showSql: false
-  # Brewery-specific
-  brewery:
+  # Dockerizer-specific
+  dockerizer:
     kubernetes:
       verifySsl: true
       kubeConfig:

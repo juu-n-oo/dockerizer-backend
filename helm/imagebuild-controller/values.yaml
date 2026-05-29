@@ -31,7 +31,7 @@ installCrd: true
 
 # Application configuration
 config:
-  brewery:
+  dockerizer:
     kubernetes:
       verifySsl: false
       kubeConfig:

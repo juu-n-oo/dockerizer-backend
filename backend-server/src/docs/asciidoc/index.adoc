@@ -1,4 +1,4 @@
-= AIPub Brewery Backend API Documentation
+= Dockerizer Backend API Documentation
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs

@@ -45,7 +45,7 @@ spec:
                 secretKeyRef:
                   name: {{ $secretName }}
                   key: {{ .Values.existingSecretKeys.datasourcePassword }}
-            {{- if .Values.config.brewery.registry.ngc.enabled }}
+            {{- if .Values.config.dockerizer.registry.ngc.enabled }}
             - name: NGC_API_KEY
               valueFrom:
                 secretKeyRef:

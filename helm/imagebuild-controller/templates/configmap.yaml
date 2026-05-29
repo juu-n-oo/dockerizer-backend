@@ -9,12 +9,12 @@ data:
   application.yaml: |
     spring:
       application:
-        name: aipub-brewery-controller
+        name: dockerizer-controller
 
-    brewery:
+    dockerizer:
       kubernetes:
-        verify-ssl: {{ .Values.config.brewery.kubernetes.verifySsl }}
+        verify-ssl: {{ .Values.config.dockerizer.kubernetes.verifySsl }}
         kube-config:
-          mode: {{ .Values.config.brewery.kubernetes.kubeConfig.mode }}
+          mode: {{ .Values.config.dockerizer.kubernetes.kubeConfig.mode }}
       imagebuild:
-        kaniko-image: {{ .Values.config.brewery.imagebuild.kanikoImage }}
+        kaniko-image: {{ .Values.config.dockerizer.imagebuild.kanikoImage }}

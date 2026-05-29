@@ -3,7 +3,7 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version '4.0.4'
 }
 
-description = 'AIPub Brewery Backend Server - REST API for Dockerfile management and ImageBuild CR creation'
+description = 'Dockerizer Backend Server - REST API for Dockerfile management and ImageBuild CR creation'
 
 ext {
     snippetsDir = file('build/generated-snippets')

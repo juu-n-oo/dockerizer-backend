@@ -1,4 +1,4 @@
-brewery:
+dockerizer:
   kubernetes:
     verify-ssl: true
     kube-config:

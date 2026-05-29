@@ -1,8 +1,8 @@
 spring:
   application:
-    name: aipub-brewery-controller
+    name: dockerizer-controller
 
-brewery:
+dockerizer:
   kubernetes:
     verify-ssl: false
     kube-config:
