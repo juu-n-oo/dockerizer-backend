@@ -1,82 +1,78 @@
 replicaCount: 1
 
 image:
-  repository: dockerizer-backend  # Required: e.g. harbor.example.com/brewery/backend-server
-  tag: 0.0.1         # Defaults to Chart.appVersion
-  pullPolicy: IfNotPresent
+  repository: ""  # ## HELM installer ##
+  pullPolicy: Always
+  tag: ""  # ## HELM installer ##
 
-imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
   create: true
+  automount: true
   annotations: {}
   name: ""
 
-service:
-  type: ClusterIP
-  port: 8080
+podAnnotations:
+  ad.datadoghq.com/dockerizer-backend.logs: '[{"source": "java", "service": "dockerizer-backend"}]'
+podLabels: {}
 
-ingress:
+podSecurityContext: {}
+
+securityContext: {}
+
+resources: {}
+
+autoscaling:
   enabled: false
-  className: ""
-  annotations: {}
-  hosts:
-    - host: aipub-brewery.cluster7.idc1.ten1010.io
-  frontend:
-    serviceName: dockerizer-web
-    servicePort: 80
-  tls: []
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
 
-resources:
-  requests:
-    cpu: 250m
-    memory: 512Mi
-  limits:
-    cpu: "1"
-    memory: 1Gi
+volumes:
+  - name: ca-certs
+    secret:
+      secretName: custom-ca-certs
+
+volumeMounts:
+  - mountPath: /certificates
+    name: ca-certs
+    readOnly: true
 
 nodeSelector: {}
-tolerations: []
-affinity: {}
 
-# PostgreSQL database (deployed as StatefulSet)
-postgresql:
-  enabled: true
-  image:
-    repository: postgres
-    tag: "16"
-    pullPolicy: IfNotPresent
-  auth:
-    database: dockerizer
-    username: aipub
-    password: ""  # Required: set via --set or values override
-  persistence:
-    storageClassName: local
-    size: 8Gi
-    localPath: /home/pjw/data  # Path on the node
-    nodeName: "vnode2.pnode13.idc1.ten1010.io"
-  resources:
-    requests:
-      cpu: 250m
-      memory: 256Mi
-    limits:
-      cpu: "1"
-      memory: 1Gi
+tolerations:
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
 
-# Spring Boot application configuration
-config:
-  # Database - auto-configured when postgresql.enabled=true
-  datasource:
-    url: "jdbc:postgresql://keycloak-postgresql.aipub.svc.cluster.local:5432/aipub"
-    username: "aipub"
-    password: ""
-    driverClassName: org.postgresql.Driver
-  jpa:
-    ddlAuto: validate
-    showSql: false
-  # Dockerizer-specific
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+
+envFrom:
+  configMapSuffix: envs
+  secretSuffix: envs
+
+applicationYaml:
+  server:
+    port: &serverPort 8080
+  spring:
+    profiles:
+      active: prod
+    datasource:
+      url: "jdbc:postgresql://harbor-database.aipub.svc.cluster.local:5432/dockerizer"
+      username: "aipub"
+      password: ""  # ## HELM installer ##
+      driverClassName: org.postgresql.Driver
+    jpa:
+      ddlAuto: validate
+      showSql: false
   dockerizer:
     kubernetes:
       verifySsl: true
@@ -98,16 +94,76 @@ config:
         enabled: false
         dockerHubUrl: https://hub.docker.com/v2
         namespace: huggingface
+  logging:
+    level:
+      dockerizer: ""  # ## HELM installer ##
+  management:
+    server:
+      port: &managementPort 8082
+    endpoint:
+      health:
+        probes:
+          enabled: true
+    endpoints:
+      web:
+        exposure:
+          include: health
+    health:
+      livenessstate:
+        enabled: true
+      readinessstate:
+        enabled: true
 
-# Existing secret containing datasource credentials (optional)
-# If set, datasource.username/password in config are ignored
-existingSecret: ""
-# Keys in the existing secret
-existingSecretKeys:
-  datasourceUrl: spring.datasource.url
-  datasourceUsername: spring.datasource.username
-  datasourcePassword: spring.datasource.password
+agent:
+  datadog: "false"
+  javaToolOptions: "-javaagent:/opt/aipub/agents/dd-java-agent.jar"
+  ddTraceAgentPort: "8126"
+  ddService: "dockerizer-backend"
+  ddEnv: "production"
+  ddVersion: "1.0.0"
+  host: "aipub-backend-datadog.aipub.svc.cluster.local"
+  ddProfilingEnabled: "true"
+  ddProfilingAllocationEnabled: "true"
 
-# NGC API Key from existing secret (optional)
-ngcApiKeySecret: ""
-ngcApiKeySecretKey: api-key
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: *serverPort
+      protocol: TCP
+      targetPort: *serverPort
+    - name: management
+      port: *managementPort
+      protocol: TCP
+      targetPort: *managementPort
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: *managementPort
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: *managementPort
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+
+ingress:
+  enabled: true
+  className: "cilium"
+  annotations: {}
+  hosts:
+    - host: ""  # ## HELM installer ##
+  frontend:
+    serviceName: dockerizer-web
+    servicePort: 80
+  tls: []

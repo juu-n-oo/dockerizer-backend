@@ -4,4 +4,21 @@ dockerizer:
     kube-config:
       mode: IN_CLUSTER
   imagebuild:
-    kaniko-image: ${KANIKO_IMAGE:gcr.io/kaniko-project/executor:latest}
+    kaniko-image: ${KANIKO_IMAGE:gcr.io/kaniko-project/executor:v1.24.0}
+
+management:
+  server:
+    port: ${MANAGEMENT_SERVER_PORT:8082}
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true

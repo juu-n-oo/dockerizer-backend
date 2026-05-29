@@ -15,6 +15,6 @@ public class ControllerProperties {
     private String group = ImageBuildConstants.GROUP;
     private String version = ImageBuildConstants.VERSION;
     private String plural = ImageBuildConstants.PLURAL;
-    private String kanikoImage = "gcr.io/kaniko-project/executor:latest";
+    private String kanikoImage = ImageBuildConstants.KANIKO_DEFAULT_IMAGE;
 
 }

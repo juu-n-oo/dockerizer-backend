@@ -1,0 +1,26 @@
+{
+  "namespace": "aipub",
+
+  "version": {
+    "image_base": "registry.ten1010.io:8443/aipub",
+    "backend_tag": "0.1.0",
+    "controller_tag": "0.1.0",
+    "kaniko_version": "v1.24.0"
+  },
+
+  "domain": {
+    "dockerizer_host": "dockerizer.cluster7.idc1.ten1010.io"
+  },
+
+  "agent": {
+    "datadog": "false"
+  },
+
+  "application": {
+    "logging_level": "INFO"
+  },
+
+  "database": {
+    "name": "dockerizer"
+  }
+}

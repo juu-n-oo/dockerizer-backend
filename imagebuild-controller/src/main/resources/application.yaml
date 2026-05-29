@@ -9,4 +9,4 @@ dockerizer:
       mode: FILE
       kube-config-path: ${HOME}/.kube/config
   imagebuild:
-    kaniko-image: gcr.io/kaniko-project/executor:latest
+    kaniko-image: gcr.io/kaniko-project/executor:v1.24.0

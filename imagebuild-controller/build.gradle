@@ -7,6 +7,8 @@ description = 'Dockerizer ImageBuild Controller - K8s Operator that watches Imag
 dependencies {
     // Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // Kubernetes Client (official)
     implementation 'io.kubernetes:client-java:24.0.0'

@@ -1,7 +1,10 @@
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-jammy
 
 WORKDIR /app
 
-COPY build/libs/*.jar app.jar
+RUN mkdir -p /opt/aipub/agents
+COPY imagebuild-controller/build/libs/*.jar /app/app.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENV USE_SYSTEM_CA_CERTS=1
+
+CMD ["java", "-jar", "/app/app.jar"]

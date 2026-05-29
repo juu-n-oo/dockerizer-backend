@@ -10,6 +10,10 @@ public final class ImageBuildConstants {
 
     public static final String IMAGE_REGISTRY_SECRET_PREFIX = "image-registry-secret-project-aipub-ten1010-io-";
 
+    public static final String KANIKO_IMAGE = "gcr.io/kaniko-project/executor";
+    public static final String KANIKO_VERSION = "v1.24.0";
+    public static final String KANIKO_DEFAULT_IMAGE = KANIKO_IMAGE + ":" + KANIKO_VERSION;
+
     public static final String PHASE_PENDING = "Pending";
     public static final String PHASE_PREPARING = "Preparing";
     public static final String PHASE_BUILDING = "Building";
